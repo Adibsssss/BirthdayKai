@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useRef, useState, type ChangeEvent } from 'react';
+import { useRef, useState, type ChangeEvent } from "react";
 
 interface UploadButtonProps {
   onFilesSelected: (files: FileList) => void;
@@ -16,7 +16,7 @@ export function UploadButton({ onFilesSelected }: UploadButtonProps) {
     if (files && files.length > 0) {
       onFilesSelected(files);
     }
-    event.target.value = '';
+    event.target.value = "";
     setMenuOpen(false);
   }
 
@@ -34,11 +34,11 @@ export function UploadButton({ onFilesSelected }: UploadButtonProps) {
       <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
         <div className="flex w-full max-w-md flex-col items-stretch gap-2">
           {menuOpen && (
-            <div className="animate-slide-up overflow-hidden rounded-2xl border border-white/70 bg-paper shadow-[0_16px_35px_rgba(91,57,42,0.18)]">
+            <div className="glass-surface animate-slide-up overflow-hidden rounded-2xl">
               <button
                 type="button"
                 onClick={() => libraryInputRef.current?.click()}
-                className="flex w-full items-center justify-center gap-2 border-b border-line py-4 text-[15px] font-medium text-ink active:bg-peach/30"
+                className="flex w-full items-center justify-center gap-2 border-b border-line/60 py-4 text-[15px] font-medium text-ink active:bg-peach/30"
               >
                 <span aria-hidden>▧</span> Choose from library
               </button>
@@ -55,14 +55,13 @@ export function UploadButton({ onFilesSelected }: UploadButtonProps) {
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
-            className="w-full rounded-2xl bg-coral py-4 text-[15px] font-bold text-white shadow-[0_10px_24px_rgba(233,120,93,0.35)] transition duration-150 active:scale-[0.98]"
+            className="glass-pill w-full rounded-2xl py-4 text-[15px] font-bold text-ink transition duration-150 active:scale-[0.98]"
           >
-            {menuOpen ? 'Close' : '+ Add your photos'}
+            {menuOpen ? "Close" : "+ Add your photos"}
           </button>
         </div>
       </div>
 
-      {/* Device gallery / file picker — multiple selection allowed. */}
       <input
         ref={libraryInputRef}
         type="file"
@@ -71,8 +70,6 @@ export function UploadButton({ onFilesSelected }: UploadButtonProps) {
         className="hidden"
         onChange={handleChange}
       />
-
-      {/* Opens the rear camera directly on devices that support capture. */}
       <input
         ref={cameraInputRef}
         type="file"
