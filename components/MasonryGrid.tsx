@@ -1,26 +1,89 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
+import type { Photo } from "@/types";
+import { PhotoCard } from "./PhotoCard";
 
 interface MasonryGridProps {
-  children: ReactNode;
+  photos: Photo[];
+  newIds: Set<string>;
+  onOpen: (index: number) => void;
+}
+
+function useColumnCount(): number {
+  const [columns, setColumns] = useState(2);
+  useEffect(() => {
+    function update() {
+      const w = window.innerWidth;
+      if (w >= 1024)
+        setColumns(4); // lg
+      else if (w >= 640)
+        setColumns(3); // sm
+      else setColumns(2);
+    }
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return columns;
 }
 
 /**
- * A CSS multi-column masonry layout. Deliberately not a JS-measured grid:
- * each child reserves its own height up front via `aspect-ratio` (using
- * the width/height Drive already extracted from the file), so the browser
- * never has to reflow once an image finishes loading. Columns fill
- * top-to-bottom before moving to the next column, so the newest photos
- * cluster near the top rather than in strict left-to-right rows — a
- * common, acceptable trade-off for CSS-only masonry.
+ * A manually-computed masonry layout: each photo is assigned to whichever
+ * column currently has the least estimated height, using its known
+ * width/height ratio. This deliberately replaces the earlier CSS
+ * `columns-N` approach.
  *
- * Extra top padding and wider gaps than a plain thumbnail grid would need
- * give each tilted PhotoCard room for its pin/tape accent to overhang the
- * frame without clipping against a neighboring column or the grid edge.
+ * CSS multi-column masonry has a real, unfixable-in-CSS limitation: the
+ * browser first estimates a target column height, then places items and
+ * breaks to the next column when one fills up. `break-inside: avoid` is
+ * only a hint within that process — with variable-height items (and this
+ * gallery prepending new photos on every poll, which forces re-balancing),
+ * browsers can still slice a single image's rendered box across the
+ * column boundary rather than growing the column. That's what caused the
+ * "top of a photo at the bottom of one column, bottom of the same photo
+ * at the top of the next" bug.
+ *
+ * Assigning photos to columns ourselves sidesteps the problem entirely:
+ * each column is just a plain flex container holding whole DOM nodes, so
+ * there's no column-balancing algorithm left that could split one.
  */
-export function MasonryGrid({ children }: MasonryGridProps) {
+export function MasonryGrid({ photos, newIds, onOpen }: MasonryGridProps) {
+  const columnCount = useColumnCount();
+
+  const columns: { photo: Photo; index: number }[][] = Array.from(
+    { length: columnCount },
+    () => [],
+  );
+  const heights = new Array(columnCount).fill(0);
+
+  photos.forEach((photo, index) => {
+    // Missing dimensions (fresh optimistic upload) default to a 1:1
+    // guess, which is corrected once Drive processing lands the real
+    // width/height on the next poll.
+    const ratio = photo.width && photo.height ? photo.height / photo.width : 1;
+    let shortestCol = 0;
+    for (let c = 1; c < columnCount; c++) {
+      if (heights[c] < heights[shortestCol]) shortestCol = c;
+    }
+    columns[shortestCol].push({ photo, index });
+    heights[shortestCol] += ratio + 0.08; // small constant for gap + frame padding
+  });
+
   return (
-    <div className="corkboard-texture columns-2 gap-4 rounded-[1.75rem] px-3 pb-2 pt-4 sm:columns-3 sm:gap-5 sm:px-4 lg:columns-4">
-      {children}
+    <div className="corkboard-texture flex gap-4 rounded-[1.75rem] px-3 pb-2 pt-4 sm:gap-5 sm:px-4">
+      {columns.map((columnItems, colIndex) => (
+        <div key={colIndex} className="flex flex-1 flex-col gap-4 sm:gap-5">
+          {columnItems.map(({ photo, index }) => (
+            <PhotoCard
+              key={photo.id}
+              photo={photo}
+              onOpen={() => onOpen(index)}
+              isNew={newIds.has(photo.id)}
+            />
+          ))}
+        </div>
+      ))}
     </div>
   );
 }

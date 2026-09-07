@@ -40,7 +40,7 @@ export function PhotoCard({ photo, onOpen, isNew = false }: PhotoCardProps) {
       type="button"
       onClick={onOpen}
       style={{ "--tilt": `${tilt}deg` } as CSSProperties}
-      className={`group relative mb-4 block w-full masonry-item rounded-sm polaroid-frame rotate-[var(--tilt)] transition-transform duration-300 hover:z-10 hover:rotate-0 hover:-translate-y-1 sm:mb-5 ${
+      className={`group relative block w-full rounded-sm polaroid-frame rotate-[var(--tilt)] transition-transform duration-300 hover:z-10 hover:rotate-0 hover:-translate-y-1 ${
         isNew ? "animate-glow-pulse" : ""
       }`}
       aria-label="Open photo"

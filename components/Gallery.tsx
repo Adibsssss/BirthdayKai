@@ -96,16 +96,7 @@ export function Gallery({
 
   return (
     <div className="pb-4">
-      <MasonryGrid>
-        {photos.map((photo, index) => (
-          <PhotoCard
-            key={photo.id}
-            photo={photo}
-            onOpen={() => setOpenIndex(index)}
-            isNew={newIds.has(photo.id)}
-          />
-        ))}
-      </MasonryGrid>
+      <MasonryGrid photos={photos} newIds={newIds} onOpen={setOpenIndex} />
 
       {hasMore && (
         <div className="mt-2 flex justify-center px-4">
