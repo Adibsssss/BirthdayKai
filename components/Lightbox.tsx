@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState, type TouchEvent } from 'react';
-import type { Photo } from '@/types';
+import { useEffect, useRef, useState, type TouchEvent } from "react";
+import type { Photo } from "@/types";
 
 interface LightboxProps {
   photos: Photo[];
@@ -13,35 +13,43 @@ interface LightboxProps {
 const CLOSE_THRESHOLD_PX = 100;
 const SWIPE_THRESHOLD_PX = 60;
 
-export function Lightbox({ photos, index, onClose, onNavigate }: LightboxProps) {
+export function Lightbox({
+  photos,
+  index,
+  onClose,
+  onNavigate,
+}: LightboxProps) {
   const photo = photos[index];
   const [loaded, setLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [dragY, setDragY] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'error'>('idle');
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "error">(
+    "idle",
+  );
 
   const touchStart = useRef<{ x: number; y: number } | null>(null);
-  const axis = useRef<'x' | 'y' | null>(null);
+  const axis = useRef<"x" | "y" | null>(null);
 
   useEffect(() => {
     setLoaded(false);
     setImageError(false);
-    setSaveState('idle');
+    setSaveState("idle");
   }, [photo?.id]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') onClose();
-      if (event.key === 'ArrowRight' && index < photos.length - 1) onNavigate(index + 1);
-      if (event.key === 'ArrowLeft' && index > 0) onNavigate(index - 1);
+      if (event.key === "Escape") onClose();
+      if (event.key === "ArrowRight" && index < photos.length - 1)
+        onNavigate(index + 1);
+      if (event.key === "ArrowLeft" && index > 0) onNavigate(index - 1);
     }
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    document.addEventListener('keydown', onKeyDown);
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener("keydown", onKeyDown);
     };
   }, [index, photos.length, onClose, onNavigate]);
 
@@ -65,9 +73,9 @@ export function Lightbox({ photos, index, onClose, onNavigate }: LightboxProps) 
     const dx = touch.clientX - touchStart.current.x;
     const dy = touch.clientY - touchStart.current.y;
     if (!axis.current) {
-      axis.current = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      axis.current = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
     }
-    if (axis.current === 'y' && dy > 0) {
+    if (axis.current === "y" && dy > 0) {
       setDragY(dy);
     }
   }
@@ -79,10 +87,11 @@ export function Lightbox({ photos, index, onClose, onNavigate }: LightboxProps) 
       const dx = touch.clientX - touchStart.current.x;
       const dy = touch.clientY - touchStart.current.y;
 
-      if (axis.current === 'y' && dy > CLOSE_THRESHOLD_PX) {
+      if (axis.current === "y" && dy > CLOSE_THRESHOLD_PX) {
         onClose();
-      } else if (axis.current === 'x') {
-        if (dx < -SWIPE_THRESHOLD_PX && index < photos.length - 1) onNavigate(index + 1);
+      } else if (axis.current === "x") {
+        if (dx < -SWIPE_THRESHOLD_PX && index < photos.length - 1)
+          onNavigate(index + 1);
         else if (dx > SWIPE_THRESHOLD_PX && index > 0) onNavigate(index - 1);
       }
     }
@@ -94,55 +103,72 @@ export function Lightbox({ photos, index, onClose, onNavigate }: LightboxProps) 
   }
 
   async function handleSave() {
-    setSaveState('saving');
+    setSaveState("saving");
     try {
       const res = await fetch(`/api/download/${currentPhoto.id}`);
-      if (!res.ok) throw new Error('download failed');
+      if (!res.ok) throw new Error("download failed");
       const blob = await res.blob();
-      const fileName = currentPhoto.name || 'photo.jpg';
+      const fileName = currentPhoto.name || "photo.jpg";
 
       // iOS Safari doesn't reliably honor the `download` attribute or a
       // programmatic anchor click for images — the native share sheet
       // (with its own "Save Image" action) is the reliable path there.
-      if (typeof navigator !== 'undefined' && navigator.canShare) {
-        const shareFile = new File([blob], fileName, { type: blob.type || currentPhoto.mimeType });
+      if (typeof navigator !== "undefined" && navigator.canShare) {
+        const shareFile = new File([blob], fileName, {
+          type: blob.type || currentPhoto.mimeType,
+        });
         if (navigator.canShare({ files: [shareFile] })) {
           await navigator.share({ files: [shareFile] });
-          setSaveState('idle');
+          setSaveState("idle");
           return;
         }
       }
 
       const objectUrl = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = objectUrl;
       link.download = fileName;
       document.body.appendChild(link);
       link.click();
       link.remove();
       setTimeout(() => URL.revokeObjectURL(objectUrl), 4000);
-      setSaveState('idle');
+      setSaveState("idle");
     } catch (err) {
       // Dismissing the native share sheet also rejects as an AbortError —
       // that's the user changing their mind, not a failure.
-      if (err instanceof DOMException && err.name === 'AbortError') {
-        setSaveState('idle');
+      if (err instanceof DOMException && err.name === "AbortError") {
+        setSaveState("idle");
         return;
       }
-      setSaveState('error');
+      setSaveState("error");
     }
   }
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col bg-black"
+      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-plum"
       style={{ opacity: dragging ? Math.max(1 - dragY / 400, 0.5) : 1 }}
       role="dialog"
       aria-modal="true"
       aria-label="Photo viewer"
     >
-      <div className="flex items-center justify-between px-4 pt-[max(1rem,env(safe-area-inset-top))]">
-        <span className="text-[13px] text-white/70">
+      {/* Blurred, darkened copy of the photo itself as the backdrop, instead
+          of flat black — the frame around the picture stays in the same
+          warm world as the rest of the gallery. */}
+      {!imageError && (
+        <img
+          key={`${photo.id}-backdrop`}
+          src={`/api/image/${photo.id}?variant=large`}
+          alt=""
+          aria-hidden
+          draggable={false}
+          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-70 blur-3xl saturate-150"
+        />
+      )}
+      <div className="absolute inset-0 bg-plum/55" aria-hidden />
+
+      <div className="relative flex items-center justify-between px-4 pt-[max(1rem,env(safe-area-inset-top))]">
+        <span className="rounded-full bg-black/25 px-2.5 py-1 text-[12px] font-medium text-white/90 backdrop-blur-sm">
           {index + 1} / {photos.length}
         </span>
         <button
@@ -151,7 +177,14 @@ export function Lightbox({ photos, index, onClose, onNavigate }: LightboxProps) 
           aria-label="Close"
           className="flex h-10 w-10 items-center justify-center rounded-full text-white active:bg-white/10"
         >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          >
             <path d="M3.5 3.5l11 11M14.5 3.5l-11 11" strokeLinecap="round" />
           </svg>
         </button>
@@ -164,15 +197,10 @@ export function Lightbox({ photos, index, onClose, onNavigate }: LightboxProps) 
         onTouchEnd={handleTouchEnd}
         style={{ transform: `translateY(${dragY}px)` }}
       >
-        {!loaded && !imageError && (
-          <div
-            aria-hidden
-            className="absolute h-8 w-8 animate-pulse rounded-full border-2 border-white/30 border-t-white/70"
-          />
-        )}
-
         {imageError ? (
-          <p className="px-8 text-center text-[14px] text-white/70">This photo couldn&rsquo;t be loaded.</p>
+          <p className="px-8 text-center text-[14px] text-white/70">
+            This photo couldn&rsquo;t be loaded.
+          </p>
         ) : (
           <img
             key={photo.id}
@@ -181,24 +209,26 @@ export function Lightbox({ photos, index, onClose, onNavigate }: LightboxProps) 
             onLoad={() => setLoaded(true)}
             onError={() => setImageError(true)}
             draggable={false}
-            className={`max-h-full max-w-full select-none object-contain transition-opacity duration-150 ${
-              loaded ? 'opacity-100' : 'opacity-0'
+            className={`max-h-full max-w-full select-none object-contain shadow-[0_20px_60px_rgba(0,0,0,0.45)] transition-opacity duration-300 ${
+              loaded ? "opacity-100" : "opacity-0"
             }`}
           />
         )}
       </div>
 
-      <div className="flex flex-col items-center gap-2 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-3">
+      <div className="relative flex flex-col items-center gap-2 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-3">
         <button
           type="button"
           onClick={handleSave}
-          disabled={saveState === 'saving'}
-          className="rounded-full bg-white px-6 py-3 text-[14px] font-medium text-ink active:bg-white/90 disabled:opacity-70"
+          disabled={saveState === "saving"}
+          className="rounded-full bg-coral px-6 py-3 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(238,156,32,0.35)] transition-opacity active:bg-coral/85 disabled:opacity-80"
         >
-          {saveState === 'saving' ? 'Saving…' : 'Save photo'}
+          Save photo
         </button>
-        {saveState === 'error' && (
-          <p className="text-[12px] text-white/70">Couldn&rsquo;t save that photo. Try again.</p>
+        {saveState === "error" && (
+          <p className="text-[12px] text-white/70">
+            Couldn&rsquo;t save that photo. Try again.
+          </p>
         )}
       </div>
     </div>

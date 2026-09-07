@@ -11,20 +11,20 @@ function StepIcon({ variant }: { variant: "add" | "upload" | "view" }) {
   if (variant === "add") {
     return (
       <svg viewBox="0 0 64 64" className="h-20 w-20" aria-hidden>
-        <rect x="8" y="16" width="44" height="34" rx="6" fill="#f7c9ae" />
-        <circle cx="22" cy="30" r="5" fill="#fffaf4" />
+        <rect x="8" y="16" width="44" height="34" rx="6" fill="#f0c4cf" />
+        <circle cx="22" cy="30" r="5" fill="#fffaf2" />
         <path
           d="M10 44l12-12 8 8 10-14 12 18"
           fill="none"
-          stroke="#e9785d"
+          stroke="#ee9c1f"
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <circle cx="48" cy="14" r="9" fill="#e9785d" />
+        <circle cx="48" cy="14" r="9" fill="#ee9c1f" />
         <path
           d="M48 10v8M44 14h8"
-          stroke="#fffaf4"
+          stroke="#fffaf2"
           strokeWidth="2.5"
           strokeLinecap="round"
         />
@@ -34,11 +34,11 @@ function StepIcon({ variant }: { variant: "add" | "upload" | "view" }) {
   if (variant === "upload") {
     return (
       <svg viewBox="0 0 64 64" className="h-20 w-20" aria-hidden>
-        <rect x="8" y="34" width="48" height="20" rx="6" fill="#f8df8c" />
+        <rect x="8" y="34" width="48" height="20" rx="6" fill="#f6d374" />
         <path
           d="M32 10v26M22 26l10-10 10 10"
           fill="none"
-          stroke="#e9785d"
+          stroke="#ee9c1f"
           strokeWidth="3.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -48,11 +48,11 @@ function StepIcon({ variant }: { variant: "add" | "upload" | "view" }) {
   }
   return (
     <svg viewBox="0 0 64 64" className="h-20 w-20" aria-hidden>
-      <rect x="8" y="10" width="20" height="20" rx="4" fill="#f7c9ae" />
-      <rect x="36" y="10" width="20" height="20" rx="4" fill="#f8df8c" />
-      <rect x="8" y="36" width="20" height="20" rx="4" fill="#f8df8c" />
-      <rect x="36" y="36" width="20" height="20" rx="4" fill="#f7c9ae" />
-      <path d="M32 46c-4-4-9-4-9 1s9 9 9 9 9-4 9-9-5-5-9-1z" fill="#e9785d" />
+      <rect x="8" y="10" width="20" height="20" rx="4" fill="#f0c4cf" />
+      <rect x="36" y="10" width="20" height="20" rx="4" fill="#f6d374" />
+      <rect x="8" y="36" width="20" height="20" rx="4" fill="#f6d374" />
+      <rect x="36" y="36" width="20" height="20" rx="4" fill="#f0c4cf" />
+      <path d="M32 46c-4-4-9-4-9 1s9 9 9 9 9-4 9-9-5-5-9-1z" fill="#d1487a" />
     </svg>
   );
 }
@@ -153,14 +153,11 @@ export function Onboarding({ open, onDismiss }: OnboardingProps) {
       aria-labelledby="onboarding-title"
     >
       <div className="px-6 pb-2 pt-[max(2rem,env(safe-area-inset-top))]">
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-coral">
-          Welcome to the party
-        </p>
         <h1
           id="onboarding-title"
-          className="mt-2 font-display text-4xl leading-[0.98] text-ink sm:text-5xl"
+          className="-rotate-1 font-display text-4xl leading-[0.98] text-ink sm:text-5xl"
         >
-          How to add to the book
+          You&rsquo;re invited to add to the book
         </h1>
         <p className="mt-3 text-[14px] text-muted">
           Scroll down to see how it works.
@@ -222,7 +219,7 @@ export function Onboarding({ open, onDismiss }: OnboardingProps) {
           type="button"
           onClick={onDismiss}
           disabled={!reachedEnd}
-          className="w-full rounded-2xl bg-coral py-4 text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(233,120,93,0.28)] transition-colors duration-150 active:bg-coral/80 disabled:cursor-not-allowed disabled:opacity-40"
+          className="glass-pill w-full rounded-2xl py-4 text-[15px] font-bold text-white transition-colors duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
         >
           {reachedEnd ? "Start sharing" : "Scroll to continue"}
         </button>

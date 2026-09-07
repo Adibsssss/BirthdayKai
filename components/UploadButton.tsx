@@ -27,18 +27,18 @@ export function UploadButton({ onFilesSelected }: UploadButtonProps) {
           type="button"
           aria-label="Close menu"
           onClick={() => setMenuOpen(false)}
-          className="fixed inset-0 z-30 animate-fade-in bg-black/20"
+          className="fixed inset-0 z-30 animate-fade-in bg-plum/25"
         />
       )}
 
       <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
         <div className="flex w-full max-w-md flex-col items-stretch gap-2">
           {menuOpen && (
-            <div className="glass-surface animate-slide-up overflow-hidden rounded-2xl">
+            <div className="animate-slide-up overflow-hidden rounded-2xl border border-line bg-paper shadow-[0_12px_28px_rgba(67,22,47,0.18)]">
               <button
                 type="button"
                 onClick={() => libraryInputRef.current?.click()}
-                className="flex w-full items-center justify-center gap-2 border-b border-line/60 py-4 text-[15px] font-medium text-ink active:bg-peach/30"
+                className="flex w-full items-center justify-center gap-2 border-b border-line py-4 text-[15px] font-medium text-ink active:bg-peach/30"
               >
                 <span aria-hidden>▧</span> Choose from library
               </button>
@@ -55,7 +55,9 @@ export function UploadButton({ onFilesSelected }: UploadButtonProps) {
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
-            className="glass-pill w-full rounded-2xl py-4 text-[15px] font-bold text-ink transition duration-150 active:scale-[0.98]"
+            className={`glass-pill w-full rounded-2xl py-4 text-[15px] font-bold text-white transition duration-150 active:scale-[0.98] ${
+              menuOpen ? "" : "animate-breathe"
+            }`}
           >
             {menuOpen ? "Close" : "+ Add your photos"}
           </button>
