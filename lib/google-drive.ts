@@ -3,17 +3,20 @@
 // Google Drive REST API directly (no heavyweight `googleapis` dependency
 // needed for the handful of endpoints this app uses).
 
-import { JWT } from 'google-auth-library';
-import { serverConfig } from './config';
-import type { Photo } from '@/types';
+import { OAuth2Client } from "google-auth-library";
+import { serverConfig } from "./config";
+import type { Photo } from "@/types";
 
-const DRIVE_FILES_URL = 'https://www.googleapis.com/drive/v3/files';
-const DRIVE_UPLOAD_URL = 'https://www.googleapis.com/upload/drive/v3/files';
+const DRIVE_FILES_URL = "https://www.googleapis.com/drive/v3/files";
+const DRIVE_UPLOAD_URL = "https://www.googleapis.com/upload/drive/v3/files";
 
 export class DriveApiError extends Error {
-  constructor(message: string, public readonly detail: string) {
+  constructor(
+    message: string,
+    public readonly detail: string,
+  ) {
     super(message);
-    this.name = 'DriveApiError';
+    this.name = "DriveApiError";
   }
 }
 
@@ -21,29 +24,34 @@ async function safeErrorText(res: Response): Promise<string> {
   try {
     return (await res.text()).slice(0, 500);
   } catch {
-    return '';
+    return "";
   }
 }
 
-// A JWT client caches and auto-refreshes its own access token, so we only
-// need to keep one instance alive across warm serverless invocations.
-let jwtClient: JWT | null = null;
+// An OAuth2Client caches its access token and auto-refreshes it using the
+// stored refresh token, so one instance can live across warm invocations.
+let oauthClient: OAuth2Client | null = null;
 
-function getClient(): JWT {
-  if (!jwtClient) {
-    jwtClient = new JWT({
-      email: serverConfig.serviceAccountEmail,
-      key: serverConfig.privateKey,
-      scopes: ['https://www.googleapis.com/auth/drive'],
+function getClient(): OAuth2Client {
+  if (!oauthClient) {
+    oauthClient = new OAuth2Client({
+      clientId: serverConfig.oauthClientId,
+      clientSecret: serverConfig.oauthClientSecret,
+    });
+    oauthClient.setCredentials({
+      refresh_token: serverConfig.oauthRefreshToken,
     });
   }
-  return jwtClient;
+  return oauthClient;
 }
 
 async function getAccessToken(): Promise<string> {
   const { token } = await getClient().getAccessToken();
   if (!token) {
-    throw new DriveApiError('Could not authenticate with Google Drive.', 'empty access token');
+    throw new DriveApiError(
+      "Could not authenticate with Google Drive.",
+      "empty access token",
+    );
   }
   return token;
 }
@@ -66,50 +74,64 @@ export async function uploadOriginalStream(params: {
 
   // Step 1: open a resumable session. This request has no file bytes in
   // it, so it completes almost instantly regardless of the photo's size.
-  const initRes = await fetch(`${DRIVE_UPLOAD_URL}?uploadType=resumable&fields=id,name,mimeType`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json; charset=UTF-8',
-      'X-Upload-Content-Type': params.mimeType,
-      'X-Upload-Content-Length': String(params.fileSize),
+  const initRes = await fetch(
+    `${DRIVE_UPLOAD_URL}?uploadType=resumable&fields=id,name,mimeType`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json; charset=UTF-8",
+        "X-Upload-Content-Type": params.mimeType,
+        "X-Upload-Content-Length": String(params.fileSize),
+      },
+      body: JSON.stringify({
+        name: params.fileName,
+        parents: [serverConfig.driveFolderId],
+      }),
     },
-    body: JSON.stringify({
-      name: params.fileName,
-      parents: [serverConfig.driveFolderId],
-    }),
-  });
+  );
 
   if (!initRes.ok) {
     throw new DriveApiError(
       `Failed to start upload session (${initRes.status})`,
-      await safeErrorText(initRes)
+      await safeErrorText(initRes),
     );
   }
 
-  const sessionUrl = initRes.headers.get('Location') ?? initRes.headers.get('location');
+  const sessionUrl =
+    initRes.headers.get("Location") ?? initRes.headers.get("location");
   if (!sessionUrl) {
-    throw new DriveApiError('Google Drive did not return an upload session.', '');
+    throw new DriveApiError(
+      "Google Drive did not return an upload session.",
+      "",
+    );
   }
 
   // Step 2: stream the actual bytes. `duplex: 'half'` is required by the
   // Fetch spec (and Node's undici implementation) whenever the body is a
   // ReadableStream rather than a buffered value.
   const uploadRes = await fetch(sessionUrl, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': params.mimeType,
-      'Content-Length': String(params.fileSize),
+      "Content-Type": params.mimeType,
+      "Content-Length": String(params.fileSize),
     },
     body: params.body,
-    duplex: 'half',
-  } as RequestInit & { duplex: 'half' });
+    duplex: "half",
+  } as RequestInit & { duplex: "half" });
 
   if (!uploadRes.ok) {
-    throw new DriveApiError(`Upload to Drive failed (${uploadRes.status})`, await safeErrorText(uploadRes));
+    throw new DriveApiError(
+      `Upload to Drive failed (${uploadRes.status})`,
+      await safeErrorText(uploadRes),
+    );
   }
 
-  return (await uploadRes.json()) as { id: string; name: string; mimeType: string };
+  return (await uploadRes.json()) as {
+    id: string;
+    name: string;
+    mimeType: string;
+  };
 }
 
 interface RawDriveFile {
@@ -124,35 +146,41 @@ interface RawDriveFile {
 }
 
 const LIST_FIELDS =
-  'nextPageToken, files(id, name, createdTime, mimeType, imageMediaMetadata(width, height))';
+  "nextPageToken, files(id, name, createdTime, mimeType, imageMediaMetadata(width, height))";
 
 export async function listPhotos(
   pageSize: number,
-  pageToken?: string
+  pageToken?: string,
 ): Promise<{ photos: Photo[]; nextPageToken: string | null }> {
   const token = await getAccessToken();
 
   const url = new URL(DRIVE_FILES_URL);
   url.searchParams.set(
-    'q',
-    `'${serverConfig.driveFolderId}' in parents and mimeType contains 'image/' and trashed = false`
+    "q",
+    `'${serverConfig.driveFolderId}' in parents and mimeType contains 'image/' and trashed = false`,
   );
-  url.searchParams.set('orderBy', 'createdTime desc');
-  url.searchParams.set('pageSize', String(pageSize));
-  url.searchParams.set('fields', LIST_FIELDS);
-  url.searchParams.set('spaces', 'drive');
-  if (pageToken) url.searchParams.set('pageToken', pageToken);
+  url.searchParams.set("orderBy", "createdTime desc");
+  url.searchParams.set("pageSize", String(pageSize));
+  url.searchParams.set("fields", LIST_FIELDS);
+  url.searchParams.set("spaces", "drive");
+  if (pageToken) url.searchParams.set("pageToken", pageToken);
 
   const res = await fetch(url.toString(), {
     headers: { Authorization: `Bearer ${token}` },
-    cache: 'no-store',
+    cache: "no-store",
   });
 
   if (!res.ok) {
-    throw new DriveApiError(`Failed to list photos (${res.status})`, await safeErrorText(res));
+    throw new DriveApiError(
+      `Failed to list photos (${res.status})`,
+      await safeErrorText(res),
+    );
   }
 
-  const data = (await res.json()) as { nextPageToken?: string; files?: RawDriveFile[] };
+  const data = (await res.json()) as {
+    nextPageToken?: string;
+    files?: RawDriveFile[];
+  };
 
   const photos: Photo[] = (data.files ?? []).map((f) => ({
     id: f.id,
@@ -166,7 +194,7 @@ export async function listPhotos(
   return { photos, nextPageToken: data.nextPageToken ?? null };
 }
 
-const DETAIL_FIELDS = 'id, name, mimeType, size, thumbnailLink, parents';
+const DETAIL_FIELDS = "id, name, mimeType, size, thumbnailLink, parents";
 
 /**
  * Fetches a single file's metadata and confirms it actually lives inside
@@ -178,16 +206,19 @@ const DETAIL_FIELDS = 'id, name, mimeType, size, thumbnailLink, parents';
 async function getVerifiedFile(fileId: string): Promise<RawDriveFile | null> {
   const token = await getAccessToken();
   const url = new URL(`${DRIVE_FILES_URL}/${fileId}`);
-  url.searchParams.set('fields', DETAIL_FIELDS);
+  url.searchParams.set("fields", DETAIL_FIELDS);
 
   const res = await fetch(url.toString(), {
     headers: { Authorization: `Bearer ${token}` },
-    cache: 'no-store',
+    cache: "no-store",
   });
 
   if (res.status === 404) return null;
   if (!res.ok) {
-    throw new DriveApiError(`Failed to read photo metadata (${res.status})`, await safeErrorText(res));
+    throw new DriveApiError(
+      `Failed to read photo metadata (${res.status})`,
+      await safeErrorText(res),
+    );
   }
 
   const file = (await res.json()) as RawDriveFile;
@@ -201,17 +232,20 @@ async function fetchMedia(fileId: string): Promise<Response> {
   const token = await getAccessToken();
   const res = await fetch(`${DRIVE_FILES_URL}/${fileId}?alt=media`, {
     headers: { Authorization: `Bearer ${token}` },
-    cache: 'no-store',
+    cache: "no-store",
   });
   if (!res.ok) {
-    throw new DriveApiError(`Failed to fetch photo (${res.status})`, await safeErrorText(res));
+    throw new DriveApiError(
+      `Failed to fetch photo (${res.status})`,
+      await safeErrorText(res),
+    );
   }
   return res;
 }
 
 /** Rewrites a Drive thumbnailLink's trailing size suffix, e.g. "...=s220" -> "...=s1600". */
 function withThumbnailSize(thumbnailLink: string, size: number): string {
-  const withoutSuffix = thumbnailLink.replace(/=s\d+(-c)?$/, '');
+  const withoutSuffix = thumbnailLink.replace(/=s\d+(-c)?$/, "");
   return `${withoutSuffix}=s${size}`;
 }
 
@@ -232,16 +266,20 @@ export interface PreviewResult {
  */
 export async function getPreviewResponse(
   fileId: string,
-  variant: 'thumb' | 'large'
+  variant: "thumb" | "large",
 ): Promise<PreviewResult | null> {
   const file = await getVerifiedFile(fileId);
   if (!file) return null;
 
   if (file.thumbnailLink) {
-    const size = variant === 'large' ? LARGE_PREVIEW_SIZE_PX : THUMBNAIL_SIZE_PX;
+    const size =
+      variant === "large" ? LARGE_PREVIEW_SIZE_PX : THUMBNAIL_SIZE_PX;
     const res = await fetch(withThumbnailSize(file.thumbnailLink, size));
     if (res.ok && res.body) {
-      return { body: res.body, contentType: res.headers.get('Content-Type') ?? 'image/jpeg' };
+      return {
+        body: res.body,
+        contentType: res.headers.get("Content-Type") ?? "image/jpeg",
+      };
     }
   }
 
@@ -257,7 +295,9 @@ export interface DownloadResult {
 }
 
 /** Serves the untouched original file for the explicit "Save photo" action. */
-export async function getDownloadResponse(fileId: string): Promise<DownloadResult | null> {
+export async function getDownloadResponse(
+  fileId: string,
+): Promise<DownloadResult | null> {
   const file = await getVerifiedFile(fileId);
   if (!file) return null;
 

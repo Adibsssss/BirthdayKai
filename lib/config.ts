@@ -5,43 +5,42 @@
 
 function required(name: string): string {
   const value = process.env[name];
-  if (!value || value.trim() === '') {
+  if (!value || value.trim() === "") {
     throw new Error(
-      `Missing required environment variable: ${name}. See .env.local.example.`
+      `Missing required environment variable: ${name}. See .env.local.example.`,
     );
   }
   return value;
 }
 
 export const serverConfig = {
-  get serviceAccountEmail(): string {
-    return required('GOOGLE_SERVICE_ACCOUNT_EMAIL');
+  get oauthClientId(): string {
+    return required("GOOGLE_OAUTH_CLIENT_ID");
   },
-  get privateKey(): string {
-    // Railway and most .env tooling accept multiline keys stored with
-    // literal "\n" sequences; convert them back into real newlines. If the
-    // key was pasted with real line breaks instead (also supported), this
-    // is a harmless no-op.
-    return required('GOOGLE_PRIVATE_KEY').replace(/\\n/g, '\n');
+  get oauthClientSecret(): string {
+    return required("GOOGLE_OAUTH_CLIENT_SECRET");
+  },
+  get oauthRefreshToken(): string {
+    return required("GOOGLE_OAUTH_REFRESH_TOKEN");
   },
   get driveFolderId(): string {
-    return required('GOOGLE_DRIVE_FOLDER_ID');
+    return required("GOOGLE_DRIVE_FOLDER_ID");
   },
   get maxFileSizeBytes(): number {
-    const mb = Number(process.env.MAX_FILE_SIZE_MB ?? '100');
+    const mb = Number(process.env.MAX_FILE_SIZE_MB ?? "100");
     return (Number.isFinite(mb) && mb > 0 ? mb : 100) * 1024 * 1024;
   },
   get galleryPageSize(): number {
-    const size = Number(process.env.GALLERY_PAGE_SIZE ?? '20');
+    const size = Number(process.env.GALLERY_PAGE_SIZE ?? "20");
     return Number.isFinite(size) && size > 0 ? Math.min(size, 100) : 20;
   },
 };
 
 /** Image formats accepted for upload. HEIC/HEIF covers unmodified iPhone photos. */
 export const ALLOWED_MIME_TYPES: ReadonlySet<string> = new Set([
-  'image/jpeg',
-  'image/png',
-  'image/webp',
-  'image/heic',
-  'image/heif',
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/heic",
+  "image/heif",
 ]);
