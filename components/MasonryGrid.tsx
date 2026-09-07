@@ -14,5 +14,5 @@ interface MasonryGridProps {
  * common, acceptable trade-off for CSS-only masonry.
  */
 export function MasonryGrid({ children }: MasonryGridProps) {
-  return <div className="columns-2 gap-2 px-2 sm:columns-3 sm:gap-3 sm:px-3 lg:columns-4">{children}</div>;
+  return <div className="columns-2 gap-3 sm:columns-3 sm:gap-4 lg:columns-4">{children}</div>;
 }

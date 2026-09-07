@@ -19,7 +19,7 @@ export function UploadProgress({ tasks, onRetry, onDismiss }: UploadProgressProp
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-[calc(5.75rem+env(safe-area-inset-bottom))] z-40 flex justify-center px-4">
-      <div className="pointer-events-auto w-full max-w-sm animate-slide-up rounded-xl border border-line bg-paper/95 p-3 shadow-sm backdrop-blur">
+      <div className="pointer-events-auto w-full max-w-md animate-slide-up rounded-2xl border border-white/70 bg-paper/95 p-4 shadow-[0_12px_32px_rgba(91,57,42,0.18)] backdrop-blur">
         {active && (
           <>
             <p className="text-[13px] text-ink">
@@ -27,7 +27,7 @@ export function UploadProgress({ tasks, onRetry, onDismiss }: UploadProgressProp
             </p>
             <div className="mt-2 h-[3px] w-full overflow-hidden rounded-full bg-line">
               <div
-                className="h-full rounded-full bg-ink transition-[width] duration-150 ease-out"
+                className="h-full rounded-full bg-coral transition-[width] duration-150 ease-out"
                 style={{ width: `${activePct}%` }}
               />
             </div>
