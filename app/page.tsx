@@ -43,10 +43,10 @@ function Bunting() {
 function HeroPhoto({ className = "" }: { className?: string }) {
   return (
     <div className={className}>
-      <div className="polaroid-frame relative w-32 rotate-3 rounded-sm sm:w-44 md:w-56">
+      <div className="polaroid-frame relative w-16 rotate-3 rounded-sm sm:w-36 md:w-56">
         <span
           aria-hidden
-          className="absolute -top-3 left-1/2 h-6 w-20 -translate-x-1/2 -rotate-2 rounded-[1px] bg-butter/80 shadow-sm sm:h-7 sm:w-24"
+          className="absolute -top-2 left-1/2 h-3.5 w-9 -translate-x-1/2 -rotate-2 rounded-[1px] bg-butter/80 shadow-sm sm:-top-3 sm:h-6 sm:w-20 md:h-7 md:w-24"
         />
         <div className="aspect-[4/5] w-full overflow-hidden rounded-[2px] bg-line/40">
           <img
@@ -97,11 +97,11 @@ export default function Page() {
         <div className="relative overflow-hidden rounded-[2rem] bg-plum px-6 pb-9 pt-11 text-paper sm:px-10 sm:pb-12 sm:pt-14">
           <Bunting />
 
-          <div className="flex items-start justify-between gap-5">
-            <h1 className="max-w-[220px] -rotate-1 font-display text-4xl leading-[0.98] sm:max-w-sm sm:text-5xl md:max-w-lg md:text-6xl">
+          <div className="flex items-start justify-between gap-3 sm:gap-5">
+            <h1 className="max-w-[170px] -rotate-1 font-display text-3xl leading-[0.98] sm:max-w-sm sm:text-5xl md:max-w-lg md:text-6xl">
               A little book of big birthday memories.
             </h1>
-            <HeroPhoto className="hidden shrink-0 sm:block" />
+            <HeroPhoto className="shrink-0" />
           </div>
           <p className="mt-5 max-w-md text-sm leading-relaxed text-paper/75 sm:text-base">
             Drop in your favorite snapshots so we can hold onto every laugh,
