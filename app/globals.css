@@ -79,6 +79,12 @@ img {
     0 10px 22px rgba(67, 22, 47, 0.16);
 }
 
+.masonry-item {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
