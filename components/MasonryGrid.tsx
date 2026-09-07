@@ -55,19 +55,11 @@ export function MasonryGrid({ photos, newIds, onOpen }: MasonryGridProps) {
     { length: columnCount },
     () => [],
   );
-  const heights = new Array(columnCount).fill(0);
 
+  // Distribute items evenly across columns by index to prevent height-estimation drift
   photos.forEach((photo, index) => {
-    // Missing dimensions (fresh optimistic upload) default to a 1:1
-    // guess, which is corrected once Drive processing lands the real
-    // width/height on the next poll.
-    const ratio = photo.width && photo.height ? photo.height / photo.width : 1;
-    let shortestCol = 0;
-    for (let c = 1; c < columnCount; c++) {
-      if (heights[c] < heights[shortestCol]) shortestCol = c;
-    }
-    columns[shortestCol].push({ photo, index });
-    heights[shortestCol] += ratio + 0.08; // small constant for gap + frame padding
+    const targetCol = index % columnCount;
+    columns[targetCol].push({ photo, index });
   });
 
   return (
