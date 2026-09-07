@@ -25,6 +25,7 @@ function Bunting() {
         stroke="currentColor"
         strokeWidth="1.5"
       />
+
       {[24, 80, 136, 192, 248, 304, 360].map((x, i) => (
         <path
           key={x}
@@ -43,12 +44,13 @@ function Bunting() {
 function HeroPhoto({ className = "" }: { className?: string }) {
   return (
     <div className={className}>
-      <div className="polaroid-frame relative w-16 rotate-3 rounded-sm sm:w-36 md:w-56">
+      <div className="polaroid-frame relative w-full rotate-3 rounded-sm">
         <span
           aria-hidden
-          className="absolute -top-2 left-1/2 h-3.5 w-9 -translate-x-1/2 -rotate-2 rounded-[1px] bg-butter/80 shadow-sm sm:-top-3 sm:h-6 sm:w-20 md:h-7 md:w-24"
+          className="absolute -top-2 left-1/2 h-4 w-11 -translate-x-1/2 -rotate-2 rounded-[1px] bg-butter/80 shadow-sm sm:-top-3 sm:h-6 sm:w-20 md:h-7 md:w-24"
         />
-        <div className="aspect-[4/5] w-full overflow-hidden rounded-[2px] bg-line/40">
+
+        <div className="aspect-square w-full overflow-hidden rounded-[2px] bg-line/40">
           <img
             src="/hero-baby.jpg"
             alt="Kai"
@@ -62,8 +64,10 @@ function HeroPhoto({ className = "" }: { className?: string }) {
 
 export default function Page() {
   const { showOnboarding, dismiss } = useOnboarding();
+
   const { photos, status, hasMore, loadingMore, loadMore, addOptimisticPhoto } =
     useGalleryPolling();
+
   const { tasks, enqueueFiles, retryTask, removeTask } = useUpload({
     onPhotoUploaded: addOptimisticPhoto,
   });
@@ -72,8 +76,12 @@ export default function Page() {
   // grows, by changing the element's key so React remounts it.
   const previousCount = useRef(photos.length);
   const [tickKey, setTickKey] = useState(0);
+
   useEffect(() => {
-    if (photos.length > previousCount.current) setTickKey((k) => k + 1);
+    if (photos.length > previousCount.current) {
+      setTickKey((k) => k + 1);
+    }
+
     previousCount.current = photos.length;
   }, [photos.length]);
 
@@ -87,6 +95,7 @@ export default function Page() {
           >
             ✦
           </span>
+
           <p className="font-display text-lg leading-none text-ink">
             Kai&apos;s birthday
           </p>
@@ -94,19 +103,26 @@ export default function Page() {
       </header>
 
       <section className="mx-auto max-w-6xl px-4 pt-8 sm:px-6 sm:pt-12">
-        <div className="relative overflow-hidden rounded-[2rem] bg-plum px-6 pb-9 pt-11 text-paper sm:px-10 sm:pb-12 sm:pt-14">
+        <div className="relative overflow-hidden rounded-[2rem] bg-plum px-5 pb-8 pt-11 text-paper sm:px-10 sm:pb-12 sm:pt-14">
           <Bunting />
 
-          <div className="flex items-start justify-between gap-3 sm:gap-5">
-            <h1 className="max-w-[170px] -rotate-1 font-display text-3xl leading-[0.98] sm:max-w-sm sm:text-5xl md:max-w-lg md:text-6xl">
-              A little book of big birthday memories.
-            </h1>
-            <HeroPhoto className="shrink-0" />
+          {/* Mobile-first hero layout */}
+          <div className="flex items-center gap-4 sm:gap-6">
+            {/* Text takes roughly half of the banner */}
+            <div className="min-w-0 flex-1">
+              <h1 className="-rotate-1 font-display text-[1.8rem] leading-[0.98] sm:text-4xl md:text-6xl">
+                A little book of big birthday memories.
+              </h1>
+
+              <p className="mt-4 text-xs leading-relaxed text-paper/75 sm:mt-5 sm:max-w-md sm:text-base">
+                Drop in your favorite snapshots so we can hold onto every laugh,
+                candle, and happy moment.
+              </p>
+            </div>
+
+            {/* Image takes roughly half of the banner */}
+            <HeroPhoto className="w-[46%] shrink-0" />
           </div>
-          <p className="mt-5 max-w-md text-sm leading-relaxed text-paper/75 sm:text-base">
-            Drop in your favorite snapshots so we can hold onto every laugh,
-            candle, and happy moment.
-          </p>
 
           {photos.length > 0 && status === "ready" && (
             <div className="mt-7 inline-flex items-center gap-2 rounded-full bg-paper/10 py-1.5 pl-1.5 pr-4">
@@ -116,6 +132,7 @@ export default function Page() {
               >
                 {photos.length}
               </span>
+
               <span className="text-[13px] font-medium text-paper/85">
                 {photos.length === 1
                   ? "photo pinned so far"
@@ -128,6 +145,7 @@ export default function Page() {
 
       <section className="mx-auto max-w-6xl px-4 pb-4 pt-9 sm:px-6">
         <h2 className="font-display text-3xl text-ink">Moments, together</h2>
+
         <Gallery
           photos={photos}
           status={status}
@@ -142,7 +160,9 @@ export default function Page() {
         onRetry={retryTask}
         onDismiss={removeTask}
       />
+
       <UploadButton onFilesSelected={enqueueFiles} />
+
       <Onboarding open={showOnboarding} onDismiss={dismiss} />
     </main>
   );
