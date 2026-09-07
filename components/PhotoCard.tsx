@@ -60,7 +60,7 @@ export function PhotoCard({ photo, onOpen, isNew = false }: PhotoCardProps) {
       )}
 
       <div
-        className="w-full overflow-hidden rounded-[2px] bg-line/40"
+        className="w-full overflow-hidden rounded-[2px] bg-line/40 [-webkit-mask-image:-webkit-radial-gradient(white,black)]"
         style={{ aspectRatio: ratio }}
       >
         <img
