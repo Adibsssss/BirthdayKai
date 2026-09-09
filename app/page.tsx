@@ -16,9 +16,22 @@ function CelebrationMarks() {
       className="absolute left-5 top-3 h-12 w-40 text-butter/70 sm:left-10"
       aria-hidden
     >
-      <path d="M14 25h12M20 19v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M56 16l2.5 6.5L65 25l-6.5 2.5L56 34l-2.5-6.5L47 25l6.5-2.5z" fill="currentColor" />
-      <path d="M96 25h20M106 15v20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M14 25h12M20 19v12"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M56 16l2.5 6.5L65 25l-6.5 2.5L56 34l-2.5-6.5L47 25l6.5-2.5z"
+        fill="currentColor"
+      />
+      <path
+        d="M96 25h20M106 15v20"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
       <circle cx="142" cy="18" r="3" fill="currentColor" />
       <circle cx="157" cy="31" r="2" fill="currentColor" />
     </svg>
@@ -75,15 +88,12 @@ export default function Page() {
     <main className="min-h-screen bg-paper pb-32">
       <header className="glass-surface sticky top-0 z-20 px-4 py-3">
         <div className="mx-auto flex max-w-6xl items-center gap-2.5">
-          <span
-            className="hidden"
-            aria-hidden
-          >
+          <span className="hidden" aria-hidden>
             ✦
           </span>
 
           <p className="font-display text-lg leading-none text-ink">
-            Kai&apos;s dedication &amp; birthday
+            Kai&apos;s Dedication &amp; Birthday
           </p>
         </div>
       </header>
@@ -98,7 +108,7 @@ export default function Page() {
                 A little book of blessings and birthday joy.
               </h1>
 
-              <p className="mt-4 text-xs leading-relaxed text-paper/75 sm:mt-5 sm:max-w-md sm:text-base">
+              <p className="mt-4 text-xs italic leading-relaxed text-paper/75 sm:mt-5 sm:max-w-md sm:text-base">
                 Drop in your favorite snapshots from the day so we can hold onto
                 every blessing, laugh, and candle.
               </p>
