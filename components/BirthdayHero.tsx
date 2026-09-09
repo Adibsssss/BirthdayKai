@@ -31,10 +31,10 @@ export function BirthdayHero() {
       />
 
       <div className="relative z-10 flex h-full flex-col items-center px-6 pt-4 text-center sm:pt-6">
-        <div className="polaroid-frame relative -mt-2 w-[30%] max-w-[150px] rotate-2 rounded-sm sm:w-[26%] sm:max-w-[190px]">
+        <div className="polaroid-frame relative -mt-2 w-[36%] max-w-[170px] rotate-2 rounded-sm sm:w-[30%] sm:max-w-[210px]">
           <span
             aria-hidden
-            className="absolute -top-2 left-1/2 h-3 w-8 -translate-x-1/2 -rotate-2 rounded-[1px] bg-butter/80 shadow-sm sm:-top-2.5 sm:h-4 sm:w-11"
+            className="absolute -top-2 left-1/2 h-3.5 w-9 -translate-x-1/2 -rotate-2 rounded-[1px] bg-butter/80 shadow-sm sm:-top-2.5 sm:h-4 sm:w-12"
           />
           <div className="aspect-square w-full overflow-hidden rounded-[2px] bg-line/40">
             <img
@@ -50,8 +50,8 @@ export function BirthdayHero() {
         </h1>
 
         <p className="mt-2 max-w-[15rem] text-[12px] italic leading-relaxed text-muted sm:mt-4 sm:max-w-sm sm:text-base">
-          Drop in your favorite snapshots from the day so we can hold onto every
-          blessing, laugh, and candle.
+          Drop in your favorite snapshots so we can hold onto every blessing,
+          laugh, and candle.
         </p>
       </div>
     </section>
