@@ -9,22 +9,26 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Midnight-sky celebration: an intentionally varied blue family,
-        // warmed by tiny amber/coral details that feel like candlelight.
-        ink: "#172554",
-        paper: "#f7f9ff",
-        line: "#ced9f2",
-        muted: "#64748b",
-        coral: "#d98b36", // restrained candlelight accent / primary action
-        peach: "#c4cff3", // periwinkle softness
-        butter: "#78bde9", // airy sky-blue details
-        sage: "#8ccbc4", // a quiet blue-green note
-        plum: "#1e2a78", // inky indigo for the hero and overlays
-        rose: "#ee9a68", // sparing warm highlight
+        // Dedication & birthday: a blessing-blue sky as the anchor color,
+        // warmed by an antique-gold "candle" accent and a soft blush used
+        // the way flowers show up at a christening — sparingly, as trim,
+        // never as a competing hue.
+        ink: "#1b2a52", // dusk-blue for all body/heading text
+        paper: "#f6f9ff", // near-white with a whisper of blue
+        line: "#dce6f7", // pale blue hairline/border
+        muted: "#5c6b8c", // blue-grey secondary text
+        coral: "#d9a63e", // antique gold — primary action / candlelight accent
+        peach: "#f0c4bc", // soft blush — tape, gentle fills
+        butter: "#8fc3ec", // sky blue — the lightest "main color" note
+        sage: "#9fc7b8", // quiet eucalyptus green, used sparingly
+        plum: "#14204a", // deep midnight blue — hero, overlays, lightbox
+        rose: "#d98f76", // dusty blush-terracotta, sparing warm highlight
       },
       fontFamily: {
-        sans: ["var(--font-dm-sans)", "system-ui", "sans-serif"],
-        display: ["var(--font-playfair)", "Georgia", "serif"],
+        // Names come from the @fontsource-variable packages imported in
+        // app/layout.tsx, not next/font — see the comment there.
+        sans: ["DM Sans Variable", "system-ui", "sans-serif"],
+        display: ["Playfair Display Variable", "Georgia", "serif"],
       },
       transitionDuration: {
         150: "150ms",
@@ -51,9 +55,9 @@ const config: Config = {
           "50%": { transform: "scale(1.03)" },
         },
         "glow-pulse": {
-          "0%": { boxShadow: "0 0 0 0 rgba(217,139,54,0.5)" },
-          "70%": { boxShadow: "0 0 0 16px rgba(217,139,54,0)" },
-          "100%": { boxShadow: "0 0 0 0 rgba(217,139,54,0)" },
+          "0%": { boxShadow: "0 0 0 0 rgba(217,166,62,0.5)" },
+          "70%": { boxShadow: "0 0 0 16px rgba(217,166,62,0)" },
+          "100%": { boxShadow: "0 0 0 0 rgba(217,166,62,0)" },
         },
         tick: {
           "0%": { transform: "scale(1)" },
@@ -65,6 +69,10 @@ const config: Config = {
           "60%": { transform: "scale(1.08)", opacity: "1" },
           "100%": { transform: "scale(1)", opacity: "1" },
         },
+        "halo-drift": {
+          "0%, 100%": { transform: "translateY(0) scale(1)", opacity: "0.55" },
+          "50%": { transform: "translateY(-6px) scale(1.03)", opacity: "0.8" },
+        },
       },
       animation: {
         "fade-in": "fade-in 150ms ease-out",
@@ -75,6 +83,7 @@ const config: Config = {
         "glow-pulse": "glow-pulse 1.6s ease-out 2",
         tick: "tick 420ms ease-out",
         "pop-in": "pop-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) both",
+        "halo-drift": "halo-drift 6s ease-in-out infinite",
       },
     },
   },

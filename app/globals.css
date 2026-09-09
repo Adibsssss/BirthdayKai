@@ -11,15 +11,15 @@ body {
   background:
     radial-gradient(
       circle at 92% 5%,
-      rgba(196, 207, 243, 0.7),
+      rgba(143, 195, 236, 0.5),
       transparent 30rem
     ),
     radial-gradient(
       circle at 4% 24%,
-      rgba(120, 189, 233, 0.28),
+      rgba(217, 166, 62, 0.12),
       transparent 26rem
     ),
-    #f7f9ff;
+    #f6f9ff;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: contain;
 }
@@ -28,60 +28,62 @@ img {
   -webkit-touch-callout: default;
 }
 
-/* iOS-style "liquid glass": translucent, blurred, saturated, with a thin
-   bright top edge to fake the specular highlight — used for the sticky
-   header so it reads as floating over content rather than as an opaque
-   bar. */
 .glass-surface {
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 255, 255, 0.44)
+    rgba(255, 255, 255, 0.72),
+    rgba(255, 255, 255, 0.46)
   );
   backdrop-filter: blur(22px) saturate(180%);
   -webkit-backdrop-filter: blur(22px) saturate(180%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 8px 24px rgba(30, 42, 120, 0.1);
+    0 8px 24px rgba(20, 32, 74, 0.1);
 }
 
-/* Candlelight is kept to the primary action so the blue palette remains
-   calm, while the important action still feels celebratory. */
 .glass-pill {
-  background: linear-gradient(135deg, #dc9748, #c96f42);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: linear-gradient(135deg, #e3b563, #c98a3c);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.35) inset,
-    0 10px 28px rgba(201, 111, 66, 0.28);
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 10px 28px rgba(201, 138, 60, 0.32);
 }
 
-/* A faint starry-paper texture gives an empty gallery a sense of promise. */
 .corkboard-texture {
   background-image: radial-gradient(
-    rgba(83, 108, 177, 0.18) 1px,
+    rgba(27, 42, 82, 0.16) 1px,
     transparent 1.4px
   );
   background-size: 14px 14px;
 }
 
-/* Bottom-weighted instant-film frame for photos in the shared gallery. */
 .polaroid-frame {
   background: #ffffff;
   padding: 0.5rem 0.5rem 1.6rem 0.5rem;
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.8) inset,
-    0 10px 22px rgba(30, 42, 120, 0.15);
+    0 10px 22px rgba(20, 32, 74, 0.16);
 }
 
-/* The hero feels like a child-friendly evening celebration: a deep blue
-   sky with soft blue balloon-like pools and a barely-there confetti grid. */
 .celebration-hero {
   background:
-    radial-gradient(circle at 82% 18%, rgba(120, 189, 233, 0.85) 0 7%, transparent 7.3%),
-    radial-gradient(circle at 90% 74%, rgba(196, 207, 243, 0.6) 0 10%, transparent 10.3%),
-    radial-gradient(circle at 72% 83%, rgba(140, 203, 196, 0.52) 0 4%, transparent 4.3%),
-    linear-gradient(135deg, #15215d 0%, #263c9b 52%, #275faa 100%);
+    radial-gradient(
+      circle at 78% 14%,
+      rgba(227, 181, 99, 0.55) 0 9%,
+      transparent 9.6%
+    ),
+    radial-gradient(
+      circle at 90% 76%,
+      rgba(240, 196, 188, 0.28) 0 10%,
+      transparent 10.3%
+    ),
+    radial-gradient(
+      circle at 68% 86%,
+      rgba(159, 199, 184, 0.28) 0 4%,
+      transparent 4.3%
+    ),
+    linear-gradient(135deg, #101a3f 0%, #1c2c65 52%, #24478f 100%);
 }
 
 .celebration-hero::after {
@@ -89,17 +91,39 @@ img {
   inset: 0;
   pointer-events: none;
   content: "";
-  opacity: 0.38;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.9) 1px, transparent 1.5px);
+  z-index: 0;
+  opacity: 0.34;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.9) 1px,
+    transparent 1.5px
+  );
   background-size: 22px 22px;
   mask-image: linear-gradient(90deg, transparent, black 52%, transparent);
 }
 
+.blessing-halo {
+  background: radial-gradient(
+    circle,
+    rgba(227, 181, 99, 0.55) 0%,
+    rgba(227, 181, 99, 0.18) 45%,
+    transparent 72%
+  );
+  filter: blur(2px);
+}
+
 .onboarding-sky {
   background:
-    radial-gradient(circle at 10% 18%, rgba(120, 189, 233, 0.32) 0 6%, transparent 6.3%),
-    radial-gradient(circle at 90% 78%, rgba(196, 207, 243, 0.5) 0 9%, transparent 9.3%),
-    #f7f9ff;
+    radial-gradient(
+      circle at 10% 18%,
+      rgba(143, 195, 236, 0.34) 0 6%,
+      transparent 6.3%
+    ),
+    radial-gradient(
+      circle at 90% 78%,
+      rgba(227, 181, 99, 0.22) 0 9%,
+      transparent 9.3%
+    ),
+    #f6f9ff;
 }
 
 .masonry-item {
@@ -124,6 +148,6 @@ img {
 }
 
 ::selection {
-  background: #c4cff3;
-  color: #172554;
+  background: #f0c4bc;
+  color: #1b2a52;
 }

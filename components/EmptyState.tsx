@@ -13,7 +13,8 @@ export function EmptyState() {
         The board is still bare.
       </p>
       <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted">
-        Add a favorite photo and be the first pin on Kai&apos;s birthday board.
+        Add a favorite photo and be the first pin on Kai&apos;s dedication &amp;
+        birthday board.
       </p>
     </div>
   );

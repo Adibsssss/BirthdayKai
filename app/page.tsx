@@ -9,8 +9,6 @@ import { useGalleryPolling } from "@/hooks/useGalleryPolling";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { useUpload } from "@/hooks/useUpload";
 
-/** A loose garland strung across the top of the hero banner — the one
- * ornamental flourish on the page, so everything else can stay quiet. */
 function Bunting() {
   return (
     <svg
@@ -30,7 +28,7 @@ function Bunting() {
         <path
           key={x}
           d={`M${x},${i % 2 === 0 ? 12 : 16} l-7,0 l3.5,11 z`}
-        fill={i % 3 === 0 ? "#78bde9" : i % 3 === 1 ? "#d98b36" : "#c4cff3"}
+          fill={i % 3 === 0 ? "#8fc3ec" : i % 3 === 1 ? "#e3b563" : "#f0c4bc"}
           opacity={0.9}
         />
       ))}
@@ -38,12 +36,13 @@ function Bunting() {
   );
 }
 
-/** The birthday kid himself, pinned into the banner the same way a photo
- * gets pinned into the gallery below — ties the hero back to the
- * scrapbook motif instead of using a generic decorative icon. */
 function HeroPhoto({ className = "" }: { className?: string }) {
   return (
-    <div className={className}>
+    <div className={`relative ${className}`}>
+      <div
+        aria-hidden
+        className="blessing-halo absolute -inset-4 -z-10 animate-halo-drift rounded-full"
+      />
       <div className="polaroid-frame relative w-full rotate-3 rounded-sm">
         <span
           aria-hidden
@@ -72,8 +71,6 @@ export default function Page() {
     onPhotoUploaded: addOptimisticPhoto,
   });
 
-  // Replays the counter's "tick" animation only when the count actually
-  // grows, by changing the element's key so React remounts it.
   const previousCount = useRef(photos.length);
   const [tickKey, setTickKey] = useState(0);
 
@@ -97,7 +94,7 @@ export default function Page() {
           </span>
 
           <p className="font-display text-lg leading-none text-ink">
-            Kai&apos;s birthday
+            Kai&apos;s dedication &amp; birthday
           </p>
         </div>
       </header>
@@ -106,26 +103,23 @@ export default function Page() {
         <div className="celebration-hero relative overflow-hidden rounded-[2rem] px-5 pb-8 pt-11 text-paper sm:px-10 sm:pb-12 sm:pt-14">
           <Bunting />
 
-          {/* Mobile-first hero layout */}
-          <div className="flex items-center gap-4 sm:gap-6">
-            {/* Text takes roughly half of the banner */}
+          <div className="relative z-10 flex items-center gap-4 sm:gap-6">
             <div className="min-w-0 flex-1">
               <h1 className="-rotate-1 font-display text-[1.8rem] leading-[0.98] sm:text-4xl md:text-6xl">
-                A little book of big birthday memories.
+                A little book of blessings and birthday joy.
               </h1>
 
               <p className="mt-4 text-xs leading-relaxed text-paper/75 sm:mt-5 sm:max-w-md sm:text-base">
-                Drop in your favorite snapshots so we can hold onto every laugh,
-                candle, and happy moment.
+                Drop in your favorite snapshots from the day so we can hold onto
+                every blessing, laugh, and candle.
               </p>
             </div>
 
-            {/* Image takes roughly half of the banner */}
             <HeroPhoto className="w-[46%] shrink-0" />
           </div>
 
           {photos.length > 0 && status === "ready" && (
-            <div className="mt-7 inline-flex items-center gap-2 rounded-full bg-paper/10 py-1.5 pl-1.5 pr-4">
+            <div className="relative z-10 mt-7 inline-flex items-center gap-2 rounded-full bg-paper/10 py-1.5 pl-1.5 pr-4">
               <span
                 key={tickKey}
                 className="flex h-7 min-w-7 animate-tick items-center justify-center rounded-full bg-coral px-2 text-[13px] font-bold text-white"
