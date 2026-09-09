@@ -9,21 +9,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Warm scrapbook / photo-booth palette. `coral`, `peach`, `butter`,
-        // `line`, `muted`, `ink`, `paper` are kept as token *names* so every
-        // component that already reads them just inherits the new values —
-        // only `plum` and `rose` are newly introduced, for the banner
-        // background and the "just landed" accent.
-        ink: "#2a1810",
-        paper: "#fbf1e3",
-        line: "#ecdfc9",
-        muted: "#8c7360",
-        coral: "#ee9c1f", // marigold — primary CTA / accent
-        peach: "#f0c4cf", // dusty rose — icon fills, soft chips
-        butter: "#f6d374", // golden — icon fills
-        sage: "#a9c1a4",
-        plum: "#43162f", // deep banner background
-        rose: "#d1487a", // secondary accent — "new photo" glow, counter
+        // Midnight-sky celebration: an intentionally varied blue family,
+        // warmed by tiny amber/coral details that feel like candlelight.
+        ink: "#172554",
+        paper: "#f7f9ff",
+        line: "#ced9f2",
+        muted: "#64748b",
+        coral: "#d98b36", // restrained candlelight accent / primary action
+        peach: "#c4cff3", // periwinkle softness
+        butter: "#78bde9", // airy sky-blue details
+        sage: "#8ccbc4", // a quiet blue-green note
+        plum: "#1e2a78", // inky indigo for the hero and overlays
+        rose: "#ee9a68", // sparing warm highlight
       },
       fontFamily: {
         sans: ["var(--font-dm-sans)", "system-ui", "sans-serif"],
@@ -54,9 +51,9 @@ const config: Config = {
           "50%": { transform: "scale(1.03)" },
         },
         "glow-pulse": {
-          "0%": { boxShadow: "0 0 0 0 rgba(209,72,122,0.5)" },
-          "70%": { boxShadow: "0 0 0 16px rgba(209,72,122,0)" },
-          "100%": { boxShadow: "0 0 0 0 rgba(209,72,122,0)" },
+          "0%": { boxShadow: "0 0 0 0 rgba(217,139,54,0.5)" },
+          "70%": { boxShadow: "0 0 0 16px rgba(217,139,54,0)" },
+          "100%": { boxShadow: "0 0 0 0 rgba(217,139,54,0)" },
         },
         tick: {
           "0%": { transform: "scale(1)" },

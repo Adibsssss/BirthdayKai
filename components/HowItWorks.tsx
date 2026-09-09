@@ -4,20 +4,20 @@ function StepIcon({ variant }: { variant: "add" | "upload" | "view" }) {
   if (variant === "add") {
     return (
       <svg viewBox="0 0 64 64" className="h-12 w-12 flex-none" aria-hidden>
-        <rect x="8" y="16" width="44" height="34" rx="6" fill="#f7c9ae" />
-        <circle cx="22" cy="30" r="5" fill="#fffaf4" />
+        <rect x="8" y="16" width="44" height="34" rx="6" fill="#b8dcf6" />
+        <circle cx="22" cy="30" r="5" fill="#f7fbff" />
         <path
           d="M10 44l12-12 8 8 10-14 12 18"
           fill="none"
-          stroke="#e9785d"
+          stroke="#246bda"
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <circle cx="48" cy="14" r="9" fill="#e9785d" />
+        <circle cx="48" cy="14" r="9" fill="#246bda" />
         <path
           d="M48 10v8M44 14h8"
-          stroke="#fffaf4"
+          stroke="#f7fbff"
           strokeWidth="2.5"
           strokeLinecap="round"
         />
@@ -27,11 +27,11 @@ function StepIcon({ variant }: { variant: "add" | "upload" | "view" }) {
   if (variant === "upload") {
     return (
       <svg viewBox="0 0 64 64" className="h-12 w-12 flex-none" aria-hidden>
-        <rect x="8" y="34" width="48" height="20" rx="6" fill="#f8df8c" />
+        <rect x="8" y="34" width="48" height="20" rx="6" fill="#79b9ed" />
         <path
           d="M32 10v26M22 26l10-10 10 10"
           fill="none"
-          stroke="#e9785d"
+          stroke="#246bda"
           strokeWidth="3.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -41,11 +41,11 @@ function StepIcon({ variant }: { variant: "add" | "upload" | "view" }) {
   }
   return (
     <svg viewBox="0 0 64 64" className="h-12 w-12 flex-none" aria-hidden>
-      <rect x="8" y="10" width="20" height="20" rx="4" fill="#f7c9ae" />
-      <rect x="36" y="10" width="20" height="20" rx="4" fill="#f8df8c" />
-      <rect x="8" y="36" width="20" height="20" rx="4" fill="#f8df8c" />
-      <rect x="36" y="36" width="20" height="20" rx="4" fill="#f7c9ae" />
-      <path d="M32 46c-4-4-9-4-9 1s9 9 9 9 9-4 9-9-5-5-9-1z" fill="#e9785d" />
+      <rect x="8" y="10" width="20" height="20" rx="4" fill="#b8dcf6" />
+      <rect x="36" y="10" width="20" height="20" rx="4" fill="#79b9ed" />
+      <rect x="8" y="36" width="20" height="20" rx="4" fill="#79b9ed" />
+      <rect x="36" y="36" width="20" height="20" rx="4" fill="#b8dcf6" />
+      <path d="M32 46c-4-4-9-4-9 1s9 9 9 9 9-4 9-9-5-5-9-1z" fill="#d98b36" />
     </svg>
   );
 }

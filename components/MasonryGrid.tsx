@@ -59,7 +59,7 @@ export function MasonryGrid({ photos, newIds, onOpen }: MasonryGridProps) {
   // Distribute items evenly across columns by index to prevent height-estimation drift
   photos.forEach((photo, index) => {
     const targetCol = index % columnCount;
-    columns[targetCol].push({ photo, index });
+    columns[targetCol]!.push({ photo, index });
   });
 
   return (

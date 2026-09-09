@@ -1,228 +1,100 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface OnboardingProps {
   open: boolean;
   onDismiss: () => void;
 }
 
-function StepIcon({ variant }: { variant: "add" | "upload" | "view" }) {
-  if (variant === "add") {
-    return (
-      <svg viewBox="0 0 64 64" className="h-20 w-20" aria-hidden>
-        <rect x="8" y="16" width="44" height="34" rx="6" fill="#f0c4cf" />
-        <circle cx="22" cy="30" r="5" fill="#fffaf2" />
-        <path
-          d="M10 44l12-12 8 8 10-14 12 18"
-          fill="none"
-          stroke="#ee9c1f"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle cx="48" cy="14" r="9" fill="#ee9c1f" />
-        <path
-          d="M48 10v8M44 14h8"
-          stroke="#fffaf2"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-  }
-  if (variant === "upload") {
-    return (
-      <svg viewBox="0 0 64 64" className="h-20 w-20" aria-hidden>
-        <rect x="8" y="34" width="48" height="20" rx="6" fill="#f6d374" />
-        <path
-          d="M32 10v26M22 26l10-10 10 10"
-          fill="none"
-          stroke="#ee9c1f"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    );
-  }
-  return (
-    <svg viewBox="0 0 64 64" className="h-20 w-20" aria-hidden>
-      <rect x="8" y="10" width="20" height="20" rx="4" fill="#f0c4cf" />
-      <rect x="36" y="10" width="20" height="20" rx="4" fill="#f6d374" />
-      <rect x="8" y="36" width="20" height="20" rx="4" fill="#f6d374" />
-      <rect x="36" y="36" width="20" height="20" rx="4" fill="#f0c4cf" />
-      <path d="M32 46c-4-4-9-4-9 1s9 9 9 9 9-4 9-9-5-5-9-1z" fill="#d1487a" />
-    </svg>
-  );
-}
-
-const steps = [
+const STEPS = [
+  { title: "Add your photos", detail: "Tap the button at the bottom." },
   {
-    variant: "add" as const,
-    title: "Choose your photos",
-    description:
-      'Tap the "Add your photos" button at the bottom of the screen.',
-    detail:
-      "Choose photos already on your phone, or take a new one right here.",
+    title: "Choose your favorites",
+    detail: "Pick from your phone or take a new one.",
   },
   {
-    variant: "upload" as const,
-    title: "Send them to the gallery",
-    description: "Pick the moments you want to share, then let them upload.",
-    detail: "Keep this page open until the upload is complete.",
-  },
-  {
-    variant: "view" as const,
-    title: "Enjoy the memories",
-    description: "Everyone's photos appear together in the shared gallery.",
-    detail: "Tap a photo to see it full-screen or save it to your phone.",
+    title: "Enjoy the gallery",
+    detail: "Your moments appear for everyone to see.",
   },
 ];
+const TOTAL_DURATION_MS = 5000;
+
+function StepIcon({ step }: { step: number }) {
+  const common = {
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 3,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+
+  if (step === 0) {
+    return <svg viewBox="0 0 64 64" className="h-20 w-20 text-coral" aria-hidden><rect x="8" y="16" width="44" height="34" rx="6" className="fill-peach" /><circle cx="22" cy="30" r="5" className="fill-paper" /><path d="M10 44l12-12 8 8 10-14 12 18" {...common} /><circle cx="48" cy="14" r="9" className="fill-coral" /><path d="M48 10v8M44 14h8" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" /></svg>;
+  }
+  if (step === 1) {
+    return <svg viewBox="0 0 64 64" className="h-20 w-20 text-coral" aria-hidden><rect x="8" y="34" width="48" height="20" rx="6" className="fill-butter" /><path d="M32 10v26M22 26l10-10 10 10" {...common} strokeWidth="3.5" /></svg>;
+  }
+  return <svg viewBox="0 0 64 64" className="h-20 w-20 text-coral" aria-hidden><rect x="8" y="10" width="20" height="20" rx="4" className="fill-peach" /><rect x="36" y="10" width="20" height="20" rx="4" className="fill-butter" /><rect x="8" y="36" width="20" height="20" rx="4" className="fill-butter" /><rect x="36" y="36" width="20" height="20" rx="4" className="fill-peach" /><path d="M32 46c-4-4-9-4-9 1s9 9 9 9 9-4 9-9-5-5-9-1z" className="fill-coral" /></svg>;
+}
 
 export function Onboarding({ open, onDismiss }: OnboardingProps) {
-  const [activeStep, setActiveStep] = useState(0);
-  const [reachedEnd, setReachedEnd] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
     if (!open) return;
-    const container = scrollRef.current;
-    if (!container) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            const idx = stepRefs.current.findIndex((el) => el === entry.target);
-            if (idx !== -1) setActiveStep(idx);
-          }
-        }
-      },
-      { root: container, threshold: 0.6 },
-    );
-
-    stepRefs.current.forEach((el) => el && observer.observe(el));
-
-    function onScroll() {
-      if (!container) return;
-      const atEnd =
-        container.scrollTop + container.clientHeight >=
-        container.scrollHeight - 8;
-      if (atEnd) setReachedEnd(true);
-    }
-    container.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-
-    return () => {
-      observer.disconnect();
-      container.removeEventListener("scroll", onScroll);
+    const startedAt = performance.now();
+    let frameId = 0;
+    const tick = (now: number) => {
+      const nextElapsed = Math.min(now - startedAt, TOTAL_DURATION_MS);
+      setElapsed(nextElapsed);
+      if (nextElapsed >= TOTAL_DURATION_MS) onDismiss();
+      else frameId = requestAnimationFrame(tick);
     };
-  }, [open]);
+    frameId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frameId);
+  }, [open, onDismiss]);
 
   useEffect(() => {
-    if (open) {
-      setActiveStep(0);
-      setReachedEnd(false);
-    }
-    // Prevent the page behind the full-screen modal from scrolling.
-    if (open) {
-      const previousOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = previousOverflow;
-      };
-    }
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
   }, [open]);
 
   if (!open) return null;
 
-  function scrollToStep(index: number) {
-    stepRefs.current[index]?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-    });
-  }
+  const progress = elapsed / TOTAL_DURATION_MS;
+  const activeStep = Math.min(
+    Math.floor(progress * STEPS.length),
+    STEPS.length - 1,
+  );
+  const step = STEPS[activeStep]!;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex animate-fade-in flex-col bg-paper"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="onboarding-title"
-    >
-      <div className="px-6 pb-2 pt-[max(2rem,env(safe-area-inset-top))]">
-        <h1
-          id="onboarding-title"
-          className="-rotate-1 font-display text-4xl leading-[0.98] text-ink sm:text-5xl"
-        >
-          You&rsquo;re invited to add to the book
-        </h1>
-        <p className="mt-3 text-[14px] text-muted">
-          Scroll down to see how it works.
-        </p>
-      </div>
-
-      {/* Scroll-snapped step list — fills the remaining screen height. */}
-      <div
-        ref={scrollRef}
-        className="mx-6 mt-4 min-h-0 flex-1 snap-y snap-mandatory overflow-y-auto rounded-2xl border border-line bg-white/50"
-      >
-        {steps.map((step, index) => (
-          <div
-            key={step.title}
-            ref={(el) => {
-              stepRefs.current[index] = el;
-            }}
-            className="flex h-full min-h-full snap-start flex-col items-center justify-center px-8 py-10 text-center"
-          >
-            <span
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-peach text-sm font-bold text-ink"
-              aria-hidden
-            >
-              {index + 1}
-            </span>
-            <div className="mt-5">
-              <StepIcon variant={step.variant} />
-            </div>
-            <h2 className="mt-5 font-display text-3xl leading-none text-ink">
-              {step.title}
-            </h2>
-            <p className="mt-4 max-w-sm text-[16px] leading-relaxed text-ink/80">
-              {step.description}
-            </p>
-            <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted">
-              {step.detail}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      <div
-        className="flex items-center justify-center gap-1.5 pt-4"
-        aria-label={`Step ${activeStep + 1} of ${steps.length}`}
-      >
-        {steps.map((_, index) => (
-          <button
-            key={index}
-            type="button"
-            onClick={() => scrollToStep(index)}
-            aria-label={`Go to step ${index + 1}`}
-            className={`h-1.5 rounded-full transition-all ${index === activeStep ? "w-5 bg-coral" : "w-1.5 bg-line"}`}
-          />
-        ))}
-      </div>
-
-      <div className="p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-        <button
-          type="button"
-          onClick={onDismiss}
-          disabled={!reachedEnd}
-          className="glass-pill w-full rounded-2xl py-4 text-[15px] font-bold text-white transition-colors duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          {reachedEnd ? "Start sharing" : "Scroll to continue"}
+    <div className="onboarding-sky fixed inset-0 z-50 flex animate-fade-in flex-col" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
+      <div className="flex justify-end px-6 pt-[max(1.5rem,env(safe-area-inset-top))]">
+        <button type="button" onClick={onDismiss} className="text-sm font-bold text-muted underline underline-offset-4">
+          Skip instructions
         </button>
+      </div>
+      <div className="flex flex-1 flex-col items-center justify-center px-7 text-center">
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-coral">Quick guide</p>
+        <h1 id="onboarding-title" className="mt-2 font-display text-4xl leading-[0.98] text-ink sm:text-5xl">Share the celebration</h1>
+        <div className="mt-10 flex min-h-56 flex-col items-center justify-center" aria-live="polite">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-peach text-sm font-bold text-ink" aria-hidden>{activeStep + 1}</span>
+          <div className="mt-5"><StepIcon step={activeStep} /></div>
+          <h2 className="mt-5 font-display text-3xl leading-none text-ink">{step.title}</h2>
+          <p className="mt-3 max-w-sm text-[15px] leading-relaxed text-muted">{step.detail}</p>
+        </div>
+      </div>
+      <div className="px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+        <div className="h-1.5 overflow-hidden rounded-full bg-line" aria-label="Instructions progress">
+          <span className="block h-full rounded-full bg-coral" style={{ width: `${progress * 100}%` }} />
+        </div>
+        <p className="mt-3 text-center text-xs text-muted">Starting automatically in {Math.max(0, Math.ceil((TOTAL_DURATION_MS - elapsed) / 1000))} seconds</p>
       </div>
     </div>
   );

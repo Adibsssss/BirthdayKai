@@ -221,7 +221,7 @@ export function Lightbox({
           type="button"
           onClick={handleSave}
           disabled={saveState === "saving"}
-          className="rounded-full bg-coral px-6 py-3 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(238,156,32,0.35)] transition-opacity active:bg-coral/85 disabled:opacity-80"
+          className="rounded-full bg-coral px-6 py-3 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(217,139,54,0.35)] transition-opacity active:bg-coral/85 disabled:opacity-80"
         >
           Save photo
         </button>

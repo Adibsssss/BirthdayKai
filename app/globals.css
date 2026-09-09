@@ -10,16 +10,16 @@ body {
 body {
   background:
     radial-gradient(
-      circle at 100% 0%,
-      rgba(240, 196, 207, 0.35),
+      circle at 92% 5%,
+      rgba(196, 207, 243, 0.7),
       transparent 30rem
     ),
     radial-gradient(
-      circle at 0% 15%,
-      rgba(246, 211, 116, 0.22),
+      circle at 4% 24%,
+      rgba(120, 189, 233, 0.28),
       transparent 26rem
     ),
-    #fbf1e3;
+    #f7f9ff;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: contain;
 }
@@ -43,40 +43,63 @@ img {
   border-bottom: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 8px 24px rgba(67, 22, 47, 0.1);
+    0 8px 24px rgba(30, 42, 120, 0.1);
 }
 
-/* A warm, slightly glowing pill for the primary upload action — replaces
-   the frosted-glass pill so the one button on screen that matters reads as
-   an invitation, not another translucent surface. */
+/* Candlelight is kept to the primary action so the blue palette remains
+   calm, while the important action still feels celebratory. */
 .glass-pill {
-  background: linear-gradient(135deg, #f0ad2e, #ee7d4a);
+  background: linear-gradient(135deg, #dc9748, #c96f42);
   border: 1px solid rgba(255, 255, 255, 0.35);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.35) inset,
-    0 10px 28px rgba(238, 125, 74, 0.38);
+    0 10px 28px rgba(201, 111, 66, 0.28);
 }
 
-/* Faint dotted corkboard texture, used behind the empty state so an empty
-   gallery reads as "a board waiting for its first pin" rather than a
-   blank error-like void. */
+/* A faint starry-paper texture gives an empty gallery a sense of promise. */
 .corkboard-texture {
   background-image: radial-gradient(
-    rgba(140, 115, 96, 0.16) 1px,
+    rgba(83, 108, 177, 0.18) 1px,
     transparent 1.4px
   );
   background-size: 14px 14px;
 }
 
-/* Bottom-weighted border that reads as an instant-film frame, used on
-   PhotoCard so the grid feels like photos laid on a table rather than
-   uniform app thumbnails. */
+/* Bottom-weighted instant-film frame for photos in the shared gallery. */
 .polaroid-frame {
-  background: #fffaf2;
+  background: #ffffff;
   padding: 0.5rem 0.5rem 1.6rem 0.5rem;
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.8) inset,
-    0 10px 22px rgba(67, 22, 47, 0.16);
+    0 10px 22px rgba(30, 42, 120, 0.15);
+}
+
+/* The hero feels like a child-friendly evening celebration: a deep blue
+   sky with soft blue balloon-like pools and a barely-there confetti grid. */
+.celebration-hero {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(120, 189, 233, 0.85) 0 7%, transparent 7.3%),
+    radial-gradient(circle at 90% 74%, rgba(196, 207, 243, 0.6) 0 10%, transparent 10.3%),
+    radial-gradient(circle at 72% 83%, rgba(140, 203, 196, 0.52) 0 4%, transparent 4.3%),
+    linear-gradient(135deg, #15215d 0%, #263c9b 52%, #275faa 100%);
+}
+
+.celebration-hero::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  opacity: 0.38;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.9) 1px, transparent 1.5px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(90deg, transparent, black 52%, transparent);
+}
+
+.onboarding-sky {
+  background:
+    radial-gradient(circle at 10% 18%, rgba(120, 189, 233, 0.32) 0 6%, transparent 6.3%),
+    radial-gradient(circle at 90% 78%, rgba(196, 207, 243, 0.5) 0 9%, transparent 9.3%),
+    #f7f9ff;
 }
 
 .masonry-item {
@@ -101,6 +124,6 @@ img {
 }
 
 ::selection {
-  background: #f0c4cf;
-  color: #2a1810;
+  background: #c4cff3;
+  color: #172554;
 }

@@ -30,7 +30,7 @@ function Bunting() {
         <path
           key={x}
           d={`M${x},${i % 2 === 0 ? 12 : 16} l-7,0 l3.5,11 z`}
-          fill={i % 3 === 0 ? "#ee9c1f" : i % 3 === 1 ? "#d1487a" : "#fbf1e3"}
+        fill={i % 3 === 0 ? "#78bde9" : i % 3 === 1 ? "#d98b36" : "#c4cff3"}
           opacity={0.9}
         />
       ))}
@@ -103,7 +103,7 @@ export default function Page() {
       </header>
 
       <section className="mx-auto max-w-6xl px-4 pt-8 sm:px-6 sm:pt-12">
-        <div className="relative overflow-hidden rounded-[2rem] bg-plum px-5 pb-8 pt-11 text-paper sm:px-10 sm:pb-12 sm:pt-14">
+        <div className="celebration-hero relative overflow-hidden rounded-[2rem] px-5 pb-8 pt-11 text-paper sm:px-10 sm:pb-12 sm:pt-14">
           <Bunting />
 
           {/* Mobile-first hero layout */}
