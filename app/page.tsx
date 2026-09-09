@@ -9,29 +9,18 @@ import { useGalleryPolling } from "@/hooks/useGalleryPolling";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { useUpload } from "@/hooks/useUpload";
 
-function Bunting() {
+function CelebrationMarks() {
   return (
     <svg
-      viewBox="0 0 400 34"
-      preserveAspectRatio="none"
-      className="absolute inset-x-0 top-0 h-8 w-full text-paper/25"
+      viewBox="0 0 180 50"
+      className="absolute left-5 top-3 h-12 w-40 text-butter/70 sm:left-10"
       aria-hidden
     >
-      <path
-        d="M0,6 Q100,26 200,8 T400,6"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-
-      {[24, 80, 136, 192, 248, 304, 360].map((x, i) => (
-        <path
-          key={x}
-          d={`M${x},${i % 2 === 0 ? 12 : 16} l-7,0 l3.5,11 z`}
-          fill={i % 3 === 0 ? "#8fc3ec" : i % 3 === 1 ? "#e3b563" : "#f0c4bc"}
-          opacity={0.9}
-        />
-      ))}
+      <path d="M14 25h12M20 19v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M56 16l2.5 6.5L65 25l-6.5 2.5L56 34l-2.5-6.5L47 25l6.5-2.5z" fill="currentColor" />
+      <path d="M96 25h20M106 15v20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="142" cy="18" r="3" fill="currentColor" />
+      <circle cx="157" cy="31" r="2" fill="currentColor" />
     </svg>
   );
 }
@@ -87,7 +76,7 @@ export default function Page() {
       <header className="glass-surface sticky top-0 z-20 px-4 py-3">
         <div className="mx-auto flex max-w-6xl items-center gap-2.5">
           <span
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-coral text-sm text-white"
+            className="hidden"
             aria-hidden
           >
             ✦
@@ -101,7 +90,7 @@ export default function Page() {
 
       <section className="mx-auto max-w-6xl px-4 pt-8 sm:px-6 sm:pt-12">
         <div className="celebration-hero relative overflow-hidden rounded-[2rem] px-5 pb-8 pt-11 text-paper sm:px-10 sm:pb-12 sm:pt-14">
-          <Bunting />
+          <CelebrationMarks />
 
           <div className="relative z-10 flex items-center gap-4 sm:gap-6">
             <div className="min-w-0 flex-1">
