@@ -31,18 +31,18 @@ function StepIcon({ step }: { step: number }) {
 
   if (step === 0) {
     return (
-      <svg viewBox="0 0 64 64" className="h-20 w-20 text-coral" aria-hidden>
+      <svg viewBox="0 0 64 64" className="h-20 w-20 text-[#3979b7]" aria-hidden>
         <rect
           x="8"
           y="16"
           width="44"
           height="34"
           rx="6"
-          className="fill-peach"
+          className="fill-[#cfe8fb]"
         />
         <circle cx="22" cy="30" r="5" className="fill-paper" />
         <path d="M10 44l12-12 8 8 10-14 12 18" {...common} />
-        <circle cx="48" cy="14" r="9" className="fill-coral" />
+        <circle cx="48" cy="14" r="9" className="fill-[#5b9bd5]" />
         <path
           d="M48 10v8M44 14h8"
           stroke="#fff"
@@ -54,7 +54,7 @@ function StepIcon({ step }: { step: number }) {
   }
   if (step === 1) {
     return (
-      <svg viewBox="0 0 64 64" className="h-20 w-20 text-coral" aria-hidden>
+      <svg viewBox="0 0 64 64" className="h-20 w-20 text-[#3979b7]" aria-hidden>
         <rect
           x="8"
           y="34"
@@ -68,8 +68,8 @@ function StepIcon({ step }: { step: number }) {
     );
   }
   return (
-    <svg viewBox="0 0 64 64" className="h-20 w-20 text-coral" aria-hidden>
-      <rect x="8" y="10" width="20" height="20" rx="4" className="fill-peach" />
+      <svg viewBox="0 0 64 64" className="h-20 w-20 text-[#3979b7]" aria-hidden>
+      <rect x="8" y="10" width="20" height="20" rx="4" className="fill-[#cfe8fb]" />
       <rect
         x="36"
         y="10"
@@ -92,11 +92,11 @@ function StepIcon({ step }: { step: number }) {
         width="20"
         height="20"
         rx="4"
-        className="fill-peach"
+        className="fill-[#cfe8fb]"
       />
       <path
         d="M32 46c-4-4-9-4-9 1s9 9 9 9 9-4 9-9-5-5-9-1z"
-        className="fill-coral"
+        className="fill-[#5b9bd5]"
       />
     </svg>
   );
@@ -154,7 +154,7 @@ export function Onboarding({ open, onDismiss }: OnboardingProps) {
         </button>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center px-7 text-center">
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-coral">
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#3979b7]">
           Quick guide
         </p>
         <h1
@@ -168,7 +168,7 @@ export function Onboarding({ open, onDismiss }: OnboardingProps) {
           aria-live="polite"
         >
           <span
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-peach text-sm font-bold text-ink"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-[#d8edfc] text-sm font-bold text-[#3979b7] shadow-sm"
             aria-hidden
           >
             {activeStep + 1}
@@ -190,7 +190,7 @@ export function Onboarding({ open, onDismiss }: OnboardingProps) {
           aria-label="Instructions progress"
         >
           <span
-            className="block h-full rounded-full bg-coral"
+            className="block h-full rounded-full bg-[#5b9bd5]"
             style={{ width: `${progress * 100}%` }}
           />
         </div>

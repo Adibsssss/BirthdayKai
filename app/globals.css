@@ -120,16 +120,16 @@ img {
 .onboarding-sky {
   background:
     radial-gradient(
-      circle at 10% 18%,
-      rgba(143, 195, 236, 0.34) 0 6%,
-      transparent 6.3%
+      circle at 12% 16%,
+      rgba(112, 183, 232, 0.34) 0 8%,
+      transparent 8.3%
     ),
     radial-gradient(
-      circle at 90% 78%,
-      rgba(227, 181, 99, 0.22) 0 9%,
-      transparent 9.3%
+      circle at 88% 80%,
+      rgba(157, 210, 244, 0.5) 0 12%,
+      transparent 12.3%
     ),
-    #f6f9ff;
+    #eff8ff;
 }
 
 .masonry-item {

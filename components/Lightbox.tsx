@@ -146,7 +146,7 @@ export function Lightbox({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-plum"
+      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-[#b9def5]"
       style={{ opacity: dragging ? Math.max(1 - dragY / 400, 0.5) : 1 }}
       role="dialog"
       aria-modal="true"
@@ -162,20 +162,20 @@ export function Lightbox({
           alt=""
           aria-hidden
           draggable={false}
-          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-70 blur-3xl saturate-150"
+          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-30 blur-3xl saturate-125"
         />
       )}
-      <div className="absolute inset-0 bg-plum/55" aria-hidden />
+      <div className="absolute inset-0 bg-[#dcefff]/65" aria-hidden />
 
       <div className="relative flex items-center justify-between px-4 pt-[max(1rem,env(safe-area-inset-top))]">
-        <span className="rounded-full bg-black/25 px-2.5 py-1 text-[12px] font-medium text-white/90 backdrop-blur-sm">
+        <span className="rounded-full border border-white/50 bg-white/45 px-2.5 py-1 text-[12px] font-medium text-ink backdrop-blur-sm">
           {index + 1} / {photos.length}
         </span>
         <button
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="flex h-10 w-10 items-center justify-center rounded-full text-white active:bg-white/10"
+          className="flex h-10 w-10 items-center justify-center rounded-full text-ink active:bg-white/35"
         >
           <svg
             width="18"
@@ -209,7 +209,7 @@ export function Lightbox({
             onLoad={() => setLoaded(true)}
             onError={() => setImageError(true)}
             draggable={false}
-            className={`max-h-full max-w-full select-none object-contain shadow-[0_20px_60px_rgba(0,0,0,0.45)] transition-opacity duration-300 ${
+            className={`max-h-full max-w-full select-none object-contain shadow-[0_20px_60px_rgba(35,92,139,0.28)] transition-opacity duration-300 ${
               loaded ? "opacity-100" : "opacity-0"
             }`}
           />
@@ -221,12 +221,12 @@ export function Lightbox({
           type="button"
           onClick={handleSave}
           disabled={saveState === "saving"}
-          className="rounded-full bg-coral px-6 py-3 text-[14px] font-bold text-white shadow-[0_8px_20px_rgba(217,139,54,0.35)] transition-opacity active:bg-coral/85 disabled:opacity-80"
+          className="glass-pill rounded-full px-6 py-3 text-[14px] font-bold text-white transition-opacity active:opacity-85 disabled:opacity-80"
         >
           Save photo
         </button>
         {saveState === "error" && (
-          <p className="text-[12px] text-white/70">
+          <p className="text-[12px] text-ink/70">
             Couldn&rsquo;t save that photo. Try again.
           </p>
         )}
