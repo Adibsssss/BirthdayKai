@@ -5,10 +5,10 @@ import { Gallery } from "@/components/Gallery";
 import { Onboarding } from "@/components/Onboarding";
 import { UploadButton } from "@/components/UploadButton";
 import { UploadProgress } from "@/components/UploadProgress";
+import { BirthdayHero } from "@/components/BirthdayHero";
 import { useGalleryPolling } from "@/hooks/useGalleryPolling";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { useUpload } from "@/hooks/useUpload";
-import { BirthdayHero } from "@/components/BirthdayHero";
 
 export default function Page() {
   const { showOnboarding, dismiss } = useOnboarding();
@@ -40,7 +40,7 @@ export default function Page() {
           </span>
 
           <p className="font-display text-lg leading-none text-ink">
-            Kai&apos;s Dedication &amp; Birthday
+            Kai&apos;s Birthday &amp; Dedication
           </p>
         </div>
       </header>

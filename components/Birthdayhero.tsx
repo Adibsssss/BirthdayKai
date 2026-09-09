@@ -1,34 +1,40 @@
 "use client";
 
 /**
- * Replaces the old dark `celebration-hero` gradient banner. Balloon and
- * confetti colors are lifted from the supplied party-invite reference
- * (gold stripe, sky blue, magenta, red stripe, green, orange polka-dot),
- * hand-drawn as raw SVG fills the same way HowItWorks.tsx / Onboarding.tsx
- * already do their icon art.
+ * The section's aspect ratio is locked to the artwork's own aspect ratio
+ * (2400x1792, ~4:3). That's the key fix: previously the section's height
+ * was driven purely by its content (photo + headline + paragraph), so on
+ * a narrow phone it ended up much taller and skinnier than the artwork
+ * was drawn for -- forcing `object-cover` to crop away most of the left
+ * and right balloon columns just to fill that shape. Locking the aspect
+ * ratio means the card is always proportioned like the artwork itself, on
+ * any phone width, so the same amount of balloon shows every time (this
+ * is why the wide-screenshot version looked right: at that width the
+ * section's natural aspect ratio happened to already be close to 4:3).
  *
- * Layout is mobile-first and intentionally non-interactive: balloons +
- * bunting + confetti live in an absolutely-positioned, pointer-events-none
- * layer clipped to the section's rounded corners, concentrated at the top
- * edge and the two side edges so they frame the photo/headline/paragraph
- * instead of competing with them. Nothing below the paragraph — no badge,
- * no button, no icon row.
+ * Content sizing below (photo/headline/paragraph) is tuned to fit inside
+ * that aspect-locked height at common phone widths (~360-430px). If a
+ * device renders the headline on three lines instead of two, the box will
+ * grow slightly taller than the strict ratio (CSS aspect-ratio yields to
+ * content rather than clipping it) -- a small amount of extra side-crop
+ * in that edge case, not breakage.
  */
 
 export function BirthdayHero() {
   return (
-    <section className="relative overflow-hidden rounded-[2rem] bg-[#eaf3fd] px-6 pb-10 pt-14 sm:px-10 sm:pt-16">
+    <section className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] bg-paper">
       <img
         src="/party-frame.png"
         alt=""
         aria-hidden
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
       />
-      <div className="relative z-10 flex flex-col items-center text-center">
-        <div className="polaroid-frame relative w-[62%] max-w-[220px] rotate-2 rounded-sm">
+
+      <div className="relative z-10 flex h-full flex-col items-center px-6 pt-4 text-center sm:pt-6">
+        <div className="polaroid-frame relative -mt-2 w-[30%] max-w-[150px] rotate-2 rounded-sm sm:w-[26%] sm:max-w-[190px]">
           <span
             aria-hidden
-            className="absolute -top-2.5 left-1/2 h-4 w-11 -translate-x-1/2 -rotate-2 rounded-[1px] bg-butter/80 shadow-sm sm:-top-3 sm:h-5 sm:w-16"
+            className="absolute -top-2 left-1/2 h-3 w-8 -translate-x-1/2 -rotate-2 rounded-[1px] bg-butter/80 shadow-sm sm:-top-2.5 sm:h-4 sm:w-11"
           />
           <div className="aspect-square w-full overflow-hidden rounded-[2px] bg-line/40">
             <img
@@ -39,11 +45,11 @@ export function BirthdayHero() {
           </div>
         </div>
 
-        <h1 className="mt-7 max-w-xs font-display text-[1.9rem] leading-[1.05] text-ink sm:max-w-md sm:text-4xl">
+        <h1 className="mt-3 max-w-[16rem] font-display text-[1.55rem] leading-[1.08] text-ink sm:mt-5 sm:max-w-md sm:text-4xl">
           A little book of blessings and birthday joy.
         </h1>
 
-        <p className="mt-4 max-w-xs text-[13px] italic leading-relaxed text-muted sm:max-w-sm sm:text-base">
+        <p className="mt-2 max-w-[15rem] text-[12px] italic leading-relaxed text-muted sm:mt-4 sm:max-w-sm sm:text-base">
           Drop in your favorite snapshots from the day so we can hold onto every
           blessing, laugh, and candle.
         </p>
