@@ -68,8 +68,15 @@ function StepIcon({ step }: { step: number }) {
     );
   }
   return (
-      <svg viewBox="0 0 64 64" className="h-20 w-20 text-[#3979b7]" aria-hidden>
-      <rect x="8" y="10" width="20" height="20" rx="4" className="fill-[#cfe8fb]" />
+    <svg viewBox="0 0 64 64" className="h-20 w-20 text-[#3979b7]" aria-hidden>
+      <rect
+        x="8"
+        y="10"
+        width="20"
+        height="20"
+        rx="4"
+        className="fill-[#cfe8fb]"
+      />
       <rect
         x="36"
         y="10"
@@ -135,8 +142,8 @@ export function Onboarding({ open, onDismiss }: OnboardingProps) {
     Math.floor(progress * STEPS.length),
     STEPS.length - 1,
   );
-  const step = STEPS[activeStep]!;
-
+  const step = STEPS[activeStep] ?? STEPS[0];
+  if (!step) return null;
   return (
     <div
       className="onboarding-sky fixed inset-0 z-50 flex animate-fade-in flex-col"
